@@ -2,7 +2,6 @@ package converter.music;
 
 import java.util.List;
 
-// TODO move time signature to measure so it can vary during the song
 public class Song {
 
     private final String title;

@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Measure {
 
-    // TODO: make this a map and map the chord's position to the chord
     private final List<Chord> chords;
     private final boolean implicit;
 

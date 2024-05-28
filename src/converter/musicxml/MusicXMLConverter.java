@@ -10,11 +10,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-// TODO: add support for    - staff text
-//                          - styles?
-//                          - bar lines
-//                          - chord extensions and alterations
-
 public class MusicXMLConverter {
 
     private final MusicXMLReader reader = new MusicXMLReader();
@@ -61,8 +56,6 @@ public class MusicXMLConverter {
                 if (!measure.isImplicit()) {
                     builder.append("|");
                     if (measure.getChords().isEmpty()) {
-                        // if measure is empty, repeat previous chord
-                        // TODO: change to play last chord
                         builder.append(" x ");
                     }
 

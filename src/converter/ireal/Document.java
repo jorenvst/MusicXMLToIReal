@@ -9,7 +9,7 @@ public class Document {
     private final String content;
 
     public Document(String url, String songTitle) {
-        this.content = "<a href=\"" + url + "\">" + songTitle + "</a>";
+        this.content = "<a href=\"" + url + "\">" + songTitle + "</a>\n";
     }
 
     public void build(String path) {

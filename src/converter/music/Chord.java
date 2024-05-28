@@ -1,10 +1,5 @@
 package converter.music;
 
-// TODO support for:    - numerals
-//                      - inversion
-//                      - bass
-//                      - degree
-
 public class Chord {
 
     private final String root;
