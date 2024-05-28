@@ -1,5 +1,9 @@
 package converter.music;
 
+/**
+ * Chord --- represents a chord in music
+ * created when musicxml file is read
+ */
 public class Chord {
 
     private final String root;

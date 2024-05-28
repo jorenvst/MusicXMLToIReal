@@ -2,7 +2,6 @@
 
 <h2>1. Priority</h2>
 <ul>
-    <li>documentation</li>
     <li>musicxml inversions/bass note</li>
     <li>musicxml degree (alterations like b9)</li>
     <li>correct chord positioning</li>

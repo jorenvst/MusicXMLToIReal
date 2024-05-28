@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Document --- represents an IReal Pro document
+ */
 public class Document {
 
     private final String content;
@@ -12,6 +15,11 @@ public class Document {
         this.content = "<a href=\"" + url + "\">" + songTitle + "</a>\n";
     }
 
+    /**
+     * build an ireal pro file
+     * @param path the directory where the original .musicxml is located
+     *             this is also where the new IReal Pro file will be saved to
+     */
     public void build(String path) {
         try {
             String fileName = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".")) + ".html";

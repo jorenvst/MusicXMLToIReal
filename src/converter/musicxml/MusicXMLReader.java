@@ -14,11 +14,19 @@ import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * MusicXMLReader --- class for reading musicxml files and convert them to the Song class
+ */
 public class MusicXMLReader {
 
+    /**
+     * read a song from a musicxml file
+     * @param path the path to the musicxml file
+     * @return a new Song object
+     */
     public Song readSong(String path) {
-
         try (InputStream in = this.getClass().getResourceAsStream("/resources/keys.properties")) {
+
             Properties keys = new Properties();
             keys.load(in);
             SAXBuilder builder = new SAXBuilder();
@@ -44,7 +52,7 @@ public class MusicXMLReader {
                             measure.getChildren("harmony").stream().map(
                                     chord -> new Chord(chord.getChild("root").getChildText("root-step"), chord.getChildText("kind"))
                             ).toList(),
-                            MusicXMLBoolean.parseBoolean(measure.getAttributeValue("implicit"))
+                            measure.getAttributeValue("implicit").equals("yes")
                     );
                 } else {
                     return new Measure(measure.getChildren("harmony").stream().map(
@@ -59,6 +67,10 @@ public class MusicXMLReader {
         }
     }
 
+    /**
+     * IgnoreDTDEntityResolver --- class to ignore deprecated links for dtd
+     * e.g. when exporting a musescore file to musicxml, the included dtd is nonexistent and deprecated
+     */
     static class IgnoreDTDEntityResolver implements EntityResolver {
         @Override
         public InputSource resolveEntity(String publicId, String systemId) {

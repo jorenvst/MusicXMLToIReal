@@ -2,6 +2,9 @@ package converter.music;
 
 import java.util.List;
 
+/**
+ * Song --- represents a song
+ */
 public class Song {
 
     private final String title;

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Measure --- represents a measure in music
+ * created when musicxml file is read
+ */
 public class Measure {
 
     private final List<Chord> chords;
