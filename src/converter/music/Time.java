@@ -1,4 +1,4 @@
-package music;
+package converter.music;
 
 public record Time(int beats, int beatType) {
 

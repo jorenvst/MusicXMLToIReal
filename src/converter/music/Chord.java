@@ -1,4 +1,4 @@
-package music;
+package converter.music;
 
 // TODO support for:    - numerals
 //                      - inversion

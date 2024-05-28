@@ -1,4 +1,4 @@
-package musicxml;
+package converter.musicxml;
 
 public class MusicXMLBoolean {
 

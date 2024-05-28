@@ -1,16 +1,14 @@
-package musicxml;
+package converter.musicxml;
 
-import com.sun.tools.javac.Main;
-import music.Chord;
-import music.Measure;
-import music.Song;
-import music.Time;
+import converter.music.Chord;
+import converter.music.Measure;
+import converter.music.Song;
+import converter.music.Time;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.io.*;
 import java.util.List;
@@ -57,7 +55,7 @@ public class MusicXMLReader {
 
             return new Song(title, composer, time, key, measures);
         } catch (JDOMException | IOException e) {
-            throw new RuntimeException("Could not parse the musicxml file", e);
+            throw new RuntimeException("Could not parse the converter.musicxml file", e);
         }
     }
 

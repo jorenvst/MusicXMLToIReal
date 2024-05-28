@@ -1,4 +1,4 @@
-package ireal;
+package converter.ireal;
 
 import java.io.File;
 import java.io.FileWriter;

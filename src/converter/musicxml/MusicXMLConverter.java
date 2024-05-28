@@ -1,9 +1,9 @@
-package musicxml;
+package converter.musicxml;
 
-import ireal.Document;
-import music.Chord;
-import music.Measure;
-import music.Song;
+import converter.ireal.Document;
+import converter.music.Chord;
+import converter.music.Measure;
+import converter.music.Song;
 
 import java.io.IOException;
 import java.io.InputStream;
