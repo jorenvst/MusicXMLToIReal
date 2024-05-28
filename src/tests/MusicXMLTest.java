@@ -32,4 +32,11 @@ public class MusicXMLTest {
         }
     }
 
+    @Test
+    public void testConverter3() {
+        for (Document doc : converter.convert("/home/joren/Documents/Music/Sheet music/JamZ/mscz/14. There is no greater love Eb.musicxml")) {
+            System.out.println(doc);
+        }
+    }
+
 }

@@ -15,7 +15,7 @@ public class Song {
 
     public Song(String title, String composer, Time time, String key, List<Measure> measures) {
         this.title = title;
-        this.composer = composer;
+        this.composer = composer.trim();
         this.time = time;
         this.key = key;
         this.measures = measures;
@@ -30,11 +30,11 @@ public class Song {
     }
 
     public String getComposerFirstName() {
-        return composer.substring(0, composer.indexOf(" ")).trim();
+        return composer.substring(0, composer.indexOf(" "));
     }
 
     public String getComposerLastName() {
-        return composer.substring(composer.indexOf(" ")).trim();
+        return composer.substring(composer.indexOf(" ") + 1);
     }
 
     public Time getTime() {

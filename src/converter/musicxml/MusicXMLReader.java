@@ -88,18 +88,35 @@ public class MusicXMLReader {
     private Chord buildChord(Element chord) {
 
         String root = chord.getChild("root").getChildText("root-step");
+        String bass = null;
+        List<String> alterations = new ArrayList<>();
 
-        if (chord.getChild("root").getChild("root-alter") != null) {
-            try (InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties")) {
-                Properties chords = new Properties();
-                chords.load(in2);
+        try (InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties")) {
+            Properties chords = new Properties();
+            chords.load(in2);
+
+            if (chord.getChild("root").getChild("root-alter") != null) {
                 root += chords.getProperty(chord.getChild("root").getChildText("root-alter"));
-            } catch (IOException e) {
-                throw new RuntimeException("Could not load chords.properties", e);
             }
+
+            if (chord.getChild("bass") != null) {
+                bass = chord.getChild("bass").getChildText("bass-step");
+                if (chord.getChild("bass").getChild("bass-alter") != null) {
+                    bass += chords.getProperty(chord.getChild("bass").getChildText("bass-alter"));
+                }
+            }
+
+            if (chord.getChild("degree") != null) {
+                for (Element degree : chord.getChildren("degree")) {
+                    alterations.add(chords.getProperty(degree.getChildText("degree-alter")) + degree.getChildText("degree-value"));
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Could not load chords.properties", e);
         }
 
-        return new Chord(root, chord.getChildText("kind"));
+        return new Chord(root, chord.getChildText("kind"), alterations, bass);
     }
 
     /**

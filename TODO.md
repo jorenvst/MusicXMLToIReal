@@ -2,8 +2,6 @@
 
 <h2>1. Priority</h2>
 <ul>
-    <li>musicxml inversions/bass note</li>
-    <li>musicxml degree (alterations like b9)</li>
     <li>correct chord positioning</li>
     <li>time signature per measure so changes are possible</li>
     <li>correct bar lines so repetition is possible</li>
@@ -12,6 +10,7 @@
 
 <h2>2. Nice to have</h2>
 <ul>
+    <li>checks if chord alterations are valid</li>
     <li>staff text</li>
     <li>endings (primo, secundo,...)</li>
     <li>rehearsal marks (includes coda,...)</li>

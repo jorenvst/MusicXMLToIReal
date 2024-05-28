@@ -80,12 +80,17 @@ public class MusicXMLConverter {
                 if (!measure.isImplicit()) {
                     builder.append("|");
                     if (measure.getChords().isEmpty()) {
-                        builder.append(" x ");
+                        builder.append("x ");
                     }
 
                     for (Chord chord : measure.getChords()) {
-                        builder.append(chord.getRoot());
-                        builder.append(chords.getProperty(chord.getKind()));
+                        builder.append(chord.root()).append(chords.getProperty(chord.kind()));
+                        for (String alteration : chord.alterations()) {
+                            builder.append(alteration);
+                        }
+                        if (chord.hasBass()) {
+                            builder.append("/").append(chord.bass());
+                        }
                         builder.append(" ");
                     }
                 }
