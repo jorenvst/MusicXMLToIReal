@@ -2,6 +2,7 @@
 
 <h2>1. Priority</h2>
 <ul>
+    <li>support for multiple parts</li>
     <li>musicxml inversions/bass note</li>
     <li>musicxml degree (alterations like b9)</li>
     <li>correct chord positioning</li>
@@ -21,4 +22,5 @@
 
 <ul>
     <li>styles</li>
+    <li>support for other doc types than partwise</li>
 </ul>

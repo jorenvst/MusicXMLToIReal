@@ -7,6 +7,7 @@ import converter.music.Song;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,10 +23,14 @@ public class MusicXMLConverter {
      * @param path the path to the musicxml file that needs to be converted
      * @return a new IReal Pro Document
      */
-    public Document convert(String path) {
+    public List<Document> convert(String path) {
         // read the song from the musicxml file
-        Song song = reader.readSong(path);
-        return new Document(songToURL(song), song.getTitle());
+        List<Song> songs = reader.readSong(path);
+        List<Document> documents = new ArrayList<>();
+        for (Song song : songs) {
+            documents.add(new Document(songToURL(song), song.getTitle()));
+        }
+        return documents;
     }
 
     /**
