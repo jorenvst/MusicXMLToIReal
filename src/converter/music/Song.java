@@ -9,14 +9,12 @@ public class Song {
 
     private final String title;
     private final String composer;
-    private final Time time;
     private final String key;
     private final List<Measure> measures;
 
-    public Song(String title, String composer, Time time, String key, List<Measure> measures) {
+    public Song(String title, String composer, String key, List<Measure> measures) {
         this.title = title;
         this.composer = composer.trim();
-        this.time = time;
         this.key = key;
         this.measures = measures;
     }
@@ -37,10 +35,6 @@ public class Song {
         return composer.substring(composer.indexOf(" ") + 1);
     }
 
-    public Time getTime() {
-        return time;
-    }
-
     public String getKey() {
         return key;
     }
@@ -51,6 +45,6 @@ public class Song {
 
     @Override
     public String toString() {
-        return "Title: " + title + "\nComposer: " + composer + "\nTime: " + time + "\nKey: " + key + "\n" + measures;
+        return "Title: " + title + "\nComposer: " + composer + "\nKey: " + key + "\n" + measures;
     }
 }

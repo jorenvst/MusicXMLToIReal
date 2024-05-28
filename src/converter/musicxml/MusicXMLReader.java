@@ -4,6 +4,7 @@ import converter.music.Chord;
 import converter.music.Measure;
 import converter.music.Song;
 import converter.music.Time;
+import converter.music.factories.MeasureFactory;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -50,11 +51,11 @@ public class MusicXMLReader {
 
                 String key = keys.getProperty(part.getChild("measure").getChild("attributes").getChild("key").getChildText("fifths"));
 
-                List<Measure> measures = part.getChildren("measure").stream().map(this::buildMeasure).toList();
+                List<Measure> measures = part.getChildren("measure").stream().map(MeasureFactory::buildMeasure).toList();
 
                 // only add the song if it has harmony
                 if (measures.stream().anyMatch(measure -> !measure.getChords().isEmpty())) {
-                    songs.add(new Song(title, composer, time, key, measures));
+                    songs.add(new Song(title, composer, key, measures));
                 }
             }
             return songs;
@@ -62,61 +63,6 @@ public class MusicXMLReader {
         } catch (JDOMException | IOException e) {
             throw new RuntimeException("Could not parse the converter.musicxml file", e);
         }
-    }
-
-    /**
-     * build a measure from musicxml
-     * @param measure the element that needs to be converted into a Measure
-     * @return a new Measure
-     */
-    private Measure buildMeasure(Element measure) {
-        if (measure.getAttribute("implicit") != null) {
-            return new Measure(
-                    measure.getChildren("harmony").stream().map(this::buildChord).toList(),
-                    measure.getAttributeValue("implicit").equals("yes")
-            );
-        } else {
-            return new Measure(measure.getChildren("harmony").stream().map(this::buildChord).toList());
-        }
-    }
-
-    /**
-     * build a chord from musicxml
-     * @param chord the element that needs to be converted into a Chord
-     * @return a new Chord
-     */
-    private Chord buildChord(Element chord) {
-
-        String root = chord.getChild("root").getChildText("root-step");
-        String bass = null;
-        List<String> alterations = new ArrayList<>();
-
-        try (InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties")) {
-            Properties chords = new Properties();
-            chords.load(in2);
-
-            if (chord.getChild("root").getChild("root-alter") != null) {
-                root += chords.getProperty(chord.getChild("root").getChildText("root-alter"));
-            }
-
-            if (chord.getChild("bass") != null) {
-                bass = chord.getChild("bass").getChildText("bass-step");
-                if (chord.getChild("bass").getChild("bass-alter") != null) {
-                    bass += chords.getProperty(chord.getChild("bass").getChildText("bass-alter"));
-                }
-            }
-
-            if (chord.getChild("degree") != null) {
-                for (Element degree : chord.getChildren("degree")) {
-                    alterations.add(chords.getProperty(degree.getChildText("degree-alter")) + degree.getChildText("degree-value"));
-                }
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load chords.properties", e);
-        }
-
-        return new Chord(root, chord.getChildText("kind"), alterations, bass);
     }
 
     /**

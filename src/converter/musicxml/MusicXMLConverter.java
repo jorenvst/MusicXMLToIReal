@@ -28,26 +28,22 @@ public class MusicXMLConverter {
     private final Properties chords;
 
     public MusicXMLConverter() {
-        try {
+        try (
+                InputStream in1 = this.getClass().getResourceAsStream("/resources/time.properties");
+                InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties")
+        ) {
             Document document = new SAXBuilder().build(this.getClass().getResourceAsStream("/resources/valid-alterations.xml"));
             validQualities = document.getRootElement().getChildren("element")
                     .stream().map(Element::getText).collect(Collectors.toSet());
-        } catch (IOException | JDOMException e) {
-            throw new RuntimeException("Could not read valid-alterations.xml", e);
-        }
 
-        try (InputStream in = this.getClass().getResourceAsStream("/resources/time.properties")) {
             time = new Properties();
-            time.load(in);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read time.properties", e);
-        }
+            time.load(in1);
 
-        try (InputStream in = this.getClass().getResourceAsStream("/resources/chords.properties")) {
             chords = new Properties();
-            chords.load(in);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read chords.properties", e);
+            chords.load(in2);
+
+        } catch (IOException | JDOMException e) {
+            throw new RuntimeException("Could not read the required resources", e);
         }
     }
 
@@ -72,18 +68,12 @@ public class MusicXMLConverter {
      * @return the valid IReal Pro url
      */
     private String songToURL(Song song) {
-        // if the key signature doesn't exist in IReal Pro, throw an exception
-        if (!time.containsKey(song.getTime().toString())) {
-            throw new RuntimeException("This time signature is invalid for IReal Pro");
-        }
-        // build the url
         return "irealbook://" +
                 song.getTitle() + "=" +                                                 // title
                 song.getComposerLastName() + " " + song.getComposerFirstName() + "=" +  // composer
                 "Undefined" + "=" +                                                     // style
                 song.getKey() + "=" + "n=" +                                            // key
-                time.getProperty(song.getTime().toString()) +                           // time signature
-                translate(song.getMeasures());                                          // chord progression
+                measuresToURL(song.getMeasures());                                      // chord progression
     }
 
     /**
@@ -91,13 +81,19 @@ public class MusicXMLConverter {
      * @param measures the measures of the song that need translating
      * @return a String of the measures in IReal Pro format
      */
-    private String translate(List<Measure> measures) {
+    private String measuresToURL(List<Measure> measures) {
 
         StringBuilder builder = new StringBuilder();
 
         for (Measure measure : measures) {
+            if (measure.hasTime()) {
+                // if the key signature doesn't exist in IReal Pro, throw an exception
+                if (!time.containsKey(measure.getTime().toString())) {
+                    throw new RuntimeException("This time signature is invalid for IReal Pro");
+                }
+                builder.append(time.getProperty(measure.getTime().toString()));
+            }
             if (!measure.isImplicit()) {
-
                 builder.append("|");
                 if (measure.getChords().isEmpty()) {
                     builder.append("x ");
@@ -114,7 +110,7 @@ public class MusicXMLConverter {
                     }
 
                     // TODO: checks if this exact order is valid, but you need to check all the orders
-                    if (isValid(quality.toString())) {
+                    if (qualityIsValid(quality.toString())) {
                         iRealChord.append(quality);
                     } else {
                         throw new RuntimeException(quality + "is an invalid quality for IReal Pro");
@@ -133,7 +129,7 @@ public class MusicXMLConverter {
         return builder.toString();
     }
 
-    private boolean isValid(String quality) {
+    private boolean qualityIsValid(String quality) {
         return validQualities.contains(quality);
     }
 }
