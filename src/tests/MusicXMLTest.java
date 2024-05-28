@@ -39,4 +39,11 @@ public class MusicXMLTest {
         }
     }
 
+    @Test
+    public void testConverterTimeSignatures() {
+        for (IRealProDocument doc : converter.convert("/home/joren/Documents/Music/Sheet music/B2 Mack the Knife (K. Weill, B. Brecht) 1928.musicxml")) {
+            System.out.println(doc);
+        }
+    }
+
 }

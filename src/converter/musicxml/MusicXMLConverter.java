@@ -11,10 +11,7 @@ import org.jdom2.input.SAXBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,11 +23,15 @@ public class MusicXMLConverter {
     private final Set<String> validQualities;
     private final Properties time;
     private final Properties chords;
+    private final Properties barLines;
+
+    private final Map<Repetition, String> barLineMap;
 
     public MusicXMLConverter() {
         try (
                 InputStream in1 = this.getClass().getResourceAsStream("/resources/time.properties");
-                InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties")
+                InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties");
+                InputStream in3 = this.getClass().getResourceAsStream("/resources/bar-lines.properties")
         ) {
             Document document = new SAXBuilder().build(this.getClass().getResourceAsStream("/resources/valid-alterations.xml"));
             validQualities = document.getRootElement().getChildren("element")
@@ -42,9 +43,17 @@ public class MusicXMLConverter {
             chords = new Properties();
             chords.load(in2);
 
+            barLines = new Properties();
+            barLines.load(in3);
+
         } catch (IOException | JDOMException e) {
             throw new RuntimeException("Could not read the required resources", e);
         }
+
+        barLineMap = new HashMap<>();
+        barLineMap.put(Repetition.NONE, "");
+        barLineMap.put(Repetition.FORWARD, "-forward");
+        barLineMap.put(Repetition.BACKWARD, "-backward");
     }
 
     /**
@@ -94,7 +103,7 @@ public class MusicXMLConverter {
                 builder.append(time.getProperty(measure.getTime().toString()));
             }
             if (!measure.isImplicit()) {
-                builder.append("|");
+                builder.append(barLines.getProperty(measure.getBarLineType() + barLineMap.get(measure.getRepetition())));
                 if (measure.getChords().isEmpty()) {
                     builder.append("x ");
                 }
@@ -109,7 +118,6 @@ public class MusicXMLConverter {
                         quality.append(alteration);
                     }
 
-                    // TODO: checks if this exact order is valid, but you need to check all the orders
                     if (qualityIsValid(quality.toString())) {
                         iRealChord.append(quality);
                     } else {

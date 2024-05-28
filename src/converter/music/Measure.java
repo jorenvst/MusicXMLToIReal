@@ -1,5 +1,7 @@
 package converter.music;
 
+import converter.musicxml.Repetition;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,24 +14,32 @@ public class Measure {
 
     private final List<Chord> chords;
     private final Time time;
+    private final String barLineType;
     private final boolean implicit;
+    private final Repetition repetition;
 
-    public Measure(Collection<Chord> chords) {
-        this(chords, null, false);
-    }
-
-    public Measure(Collection<Chord> chords, boolean implicit) {
-        this(chords, null, implicit);
-    }
-
-    public Measure(Collection<Chord> chords, Time time, boolean implicit) {
+    public Measure(Collection<Chord> chords, Time time, String barLineType, boolean implicit, Repetition repetition) {
         this.chords = new ArrayList<>(chords);
-        this.implicit = implicit;
         this.time = time;
+        if (repetition == Repetition.NONE) {
+            this.barLineType = barLineType;
+        } else {
+            this.barLineType = "regular";
+        }
+        this.implicit = implicit;
+        this.repetition = repetition;
     }
 
     public List<Chord> getChords() {
         return chords;
+    }
+
+    public String getBarLineType() {
+        return barLineType;
+    }
+
+    public Repetition getRepetition() {
+        return repetition;
     }
 
     public Time getTime() {

@@ -2,6 +2,7 @@ package converter.music.factories;
 
 import converter.music.Measure;
 import converter.music.Time;
+import converter.musicxml.Repetition;
 import org.jdom2.Element;
 
 public class MeasureFactory {
@@ -12,20 +13,29 @@ public class MeasureFactory {
      * @return a new Measure
      */
     public static Measure buildMeasure(Element measure) {
+        String barLineType = "regular";
+        Repetition repetition = Repetition.NONE;
+        Time time = null;
+
+        if (measure.getChild("barline") != null) {
+            barLineType = measure.getChild("barline").getChildText("bar-style");
+            if (measure.getChild("barline").getChild("repeat") != null) {
+                repetition = measure.getChild("barline").getChild("repeat").getAttributeValue("direction").equals("forward") ? Repetition.FORWARD : Repetition.BACKWARD;
+            }
+        }
+
         if (measure.getChild("attributes") != null && measure.getChild("attributes").getChild("time") != null) {
-            return new Measure(
-                    measure.getChildren("harmony").stream().map(ChordFactory::buildChord).toList(),
-                    new Time(
-                            Integer.parseInt(measure.getChild("attributes").getChild("time").getChildText("beats")),
-                            Integer.parseInt(measure.getChild("attributes").getChild("time").getChildText("beat-type"))
-                    ),
-                    measure.getAttributeValue("implicit") != null && measure.getAttributeValue("implicit").equals("yes")
-            );
-        } else {
-            return new Measure(
-                    measure.getChildren("harmony").stream().map(ChordFactory::buildChord).toList(),
-                    measure.getAttributeValue("implicit") != null && measure.getAttributeValue("implicit").equals("yes")
+            time = new Time(
+                    Integer.parseInt(measure.getChild("attributes").getChild("time").getChildText("beats")),
+                    Integer.parseInt(measure.getChild("attributes").getChild("time").getChildText("beat-type"))
             );
         }
+        return new Measure(
+                measure.getChildren("harmony").stream().map(ChordFactory::buildChord).toList(),
+                time,
+                barLineType,
+                measure.getAttributeValue("implicit") != null && measure.getAttributeValue("implicit").equals("yes"),
+                repetition
+        );
     }
 }
