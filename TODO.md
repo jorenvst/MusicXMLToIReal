@@ -2,7 +2,6 @@
 
 <h2>1. Priority</h2>
 <ul>
-    <li>support for multiple parts</li>
     <li>musicxml inversions/bass note</li>
     <li>musicxml degree (alterations like b9)</li>
     <li>correct chord positioning</li>
@@ -16,6 +15,7 @@
     <li>staff text</li>
     <li>endings (primo, secundo,...)</li>
     <li>rehearsal marks (includes coda,...)</li>
+    <li>transposition for instruments not in C</li>
 </ul>
 
 <h2>3. Future dreams</h2>
