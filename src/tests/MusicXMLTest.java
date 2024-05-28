@@ -1,6 +1,6 @@
 package tests;
 
-import converter.ireal.Document;
+import converter.ireal.IRealProDocument;
 import converter.musicxml.MusicXMLConverter;
 import converter.musicxml.MusicXMLReader;
 import org.junit.*;
@@ -27,14 +27,14 @@ public class MusicXMLTest {
 
     @Test
     public void testConverterMultipleParts() {
-        for (Document doc : converter.convert("/home/joren/Documents/Music/Sheet music/JamZ/mscz/3. Footprints Eb.musicxml")) {
+        for (IRealProDocument doc : converter.convert("/home/joren/Documents/Music/Sheet music/JamZ/mscz/3. Footprints Eb.musicxml")) {
             System.out.println(doc);
         }
     }
 
     @Test
     public void testConverter3() {
-        for (Document doc : converter.convert("/home/joren/Documents/Music/Sheet music/JamZ/mscz/14. There is no greater love Eb.musicxml")) {
+        for (IRealProDocument doc : converter.convert("/home/joren/Documents/Music/Sheet music/JamZ/mscz/14. There is no greater love Eb.musicxml")) {
             System.out.println(doc);
         }
     }

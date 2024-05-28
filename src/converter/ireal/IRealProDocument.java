@@ -5,13 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Document --- represents an IReal Pro document
+ * IRealProDocument --- represents an IReal Pro document
  */
-public class Document {
+public class IRealProDocument {
 
     private final String content;
 
-    public Document(String url, String songTitle) {
+    public IRealProDocument(String url, String songTitle) {
         this.content = "<a href=\"" + url + "\">" + songTitle + "</a>\n";
     }
 
