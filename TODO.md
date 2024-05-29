@@ -3,7 +3,7 @@
 <h2>1. Priority</h2>
 <ul>
     <li>correct chord positioning</li>
-    <li>correct bar lines so repetition is possible</li>
+    <li>bug with repetition on the left not working, only right side</li>
     <li>if no harmony is specified, use last chord</li>
 </ul>
 
