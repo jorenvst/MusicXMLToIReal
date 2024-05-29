@@ -1,9 +1,7 @@
 package converter.musicxml;
 
-import converter.music.Chord;
 import converter.music.Measure;
 import converter.music.Song;
-import converter.music.Time;
 import converter.music.factories.MeasureFactory;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -12,7 +10,10 @@ import org.jdom2.input.SAXBuilder;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -22,47 +23,67 @@ import java.util.Properties;
  */
 public class MusicXMLReader {
 
+    private final Properties keys;
+
+    public MusicXMLReader() {
+        try (InputStream in = this.getClass().getResourceAsStream("/resources/keys.properties")) {
+            keys = new Properties();
+            keys.load(in);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read keys.properties", e);
+        }
+    }
+
     /**
      * read parts from a partwise musicxml file
      * @param path the path to the musicxml file
      * @return a list of Song objects
      */
     public List<Song> readSong(String path) {
-        try (InputStream in = this.getClass().getResourceAsStream("/resources/keys.properties")) {
 
-            Properties keys = new Properties();
-            keys.load(in);
+        List<Song> songs = new ArrayList<>();
+        Element root = getRoot(path);
+
+        for (Element part : root.getChildren("part")) {
+            Song song = readSongPart(part, root);
+            // only add the song if it has harmony
+            if (song.getMeasures().stream().anyMatch(measure -> !measure.getChords().isEmpty())) {
+                songs.add(song);
+            }
+        }
+        return songs;
+    }
+
+    public Song readSongPart(String path, int partNum) {
+        Element root = getRoot(path);
+        Element part = root.getChildren("part").get(partNum);
+        return readSongPart(part, root);
+    }
+
+    private Element getRoot(String path) {
+        try {
             SAXBuilder builder = new SAXBuilder();
-
             // ignore deprecated dtd
             builder.setEntityResolver(new IgnoreDTDEntityResolver());
-
             Document musicDoc = builder.build(new File(path));
-
-            String title = musicDoc.getRootElement().getChild("work").getChildText("work-title");
-            String composer = musicDoc.getRootElement().getChild("identification").getChildText("creator");
-
-            List<Song> songs = new ArrayList<>();
-            for (Element part : musicDoc.getRootElement().getChildren("part")) {
-                Time time = new Time(
-                        Integer.parseInt(part.getChild("measure").getChild("attributes").getChild("time").getChildText("beats")),
-                        Integer.parseInt(part.getChild("measure").getChild("attributes").getChild("time").getChildText("beat-type"))
-                );
-
-                String key = keys.getProperty(part.getChild("measure").getChild("attributes").getChild("key").getChildText("fifths"));
-
-                List<Measure> measures = part.getChildren("measure").stream().map(MeasureFactory::buildMeasure).toList();
-
-                // only add the song if it has harmony
-                if (measures.stream().anyMatch(measure -> !measure.getChords().isEmpty())) {
-                    songs.add(new Song(title, composer, key, measures));
-                }
-            }
-            return songs;
-
-        } catch (JDOMException | IOException e) {
-            throw new RuntimeException("Could not parse the converter.musicxml file", e);
+            return musicDoc.getRootElement();
+        } catch (IOException | JDOMException e) {
+            throw new RuntimeException("Could not parse the musicxml file", e);
         }
+    }
+
+    private Song readSongPart(Element part, Element root) {
+        String key = keys.getProperty(part.getChild("measure").getChild("attributes").getChild("key").getChildText("fifths"));
+        List<Measure> measures = part.getChildren("measure").stream().map(MeasureFactory::buildMeasure).toList();
+        return new Song(getTitle(root), getComposer(root), key, measures);
+    }
+
+    private String getTitle(Element root) {
+        return root.getChild("work").getChildText("work-title");
+    }
+
+    private String getComposer(Element root) {
+        return root.getChild("identification").getChildText("creator");
     }
 
     /**

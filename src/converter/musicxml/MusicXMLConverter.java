@@ -71,6 +71,16 @@ public class MusicXMLConverter {
         return documents;
     }
 
+    public IRealProDocument convertPart(String path, int part) {
+        Song song = reader.readSongPart(path, part);
+        return new IRealProDocument(songToURL(song), song.getTitle());
+    }
+
+    public IRealProDocument convertPart(String path) {
+        Song song = reader.readSongPart(path, 0);
+        return new IRealProDocument(songToURL(song), song.getTitle());
+    }
+
     /**
      * convert a song to a valid IReal Pro url
      * @param song the song that needs to be converted
@@ -107,9 +117,9 @@ public class MusicXMLConverter {
                 builder.append(barLines.getProperty(measure.getBarLineType() + barLineMap.get(measure.getRepetition())));
                 if (measure.getChords().isEmpty()) {
                     if (lastChord == null) {
-                        builder.append("n");
+                        builder.append("n ");
                     } else {
-                        builder.append(lastChord);
+                        builder.append(lastChord).append(" ");
                     }
                 }
 
