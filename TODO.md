@@ -3,7 +3,6 @@
 <h2>1. Priority</h2>
 <ul>
     <li>correct chord positioning</li>
-    <li>time signature per measure so changes are possible</li>
     <li>correct bar lines so repetition is possible</li>
     <li>if no harmony is specified, use last chord</li>
 </ul>

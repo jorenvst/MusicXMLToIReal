@@ -94,6 +94,7 @@ public class MusicXMLConverter {
 
         StringBuilder builder = new StringBuilder();
 
+        String lastChord = null;
         for (Measure measure : measures) {
             if (measure.hasTime()) {
                 // if the key signature doesn't exist in IReal Pro, throw an exception
@@ -105,7 +106,11 @@ public class MusicXMLConverter {
             if (!measure.isImplicit()) {
                 builder.append(barLines.getProperty(measure.getBarLineType() + barLineMap.get(measure.getRepetition())));
                 if (measure.getChords().isEmpty()) {
-                    builder.append("x ");
+                    if (lastChord == null) {
+                        builder.append("n");
+                    } else {
+                        builder.append(lastChord);
+                    }
                 }
 
                 for (Chord chord : measure.getChords()) {
@@ -129,6 +134,7 @@ public class MusicXMLConverter {
                     }
 
                     builder.append(iRealChord);
+                    lastChord = iRealChord.toString();
                     builder.append(" ");
                 }
             }
