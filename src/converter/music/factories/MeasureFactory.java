@@ -5,6 +5,9 @@ import converter.music.Time;
 import converter.musicxml.Repetition;
 import org.jdom2.Element;
 
+/**
+ * MeasureFactory --- Factory for building Measures
+ */
 public class MeasureFactory {
 
     /**

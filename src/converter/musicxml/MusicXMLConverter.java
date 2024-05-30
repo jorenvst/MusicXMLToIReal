@@ -28,11 +28,13 @@ public class MusicXMLConverter {
     private final Map<Repetition, String> barLineMap;
 
     public MusicXMLConverter() {
+        // load properties upon creation
         try (
-                InputStream in1 = this.getClass().getResourceAsStream("/resources/time.properties");
-                InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties");
-                InputStream in3 = this.getClass().getResourceAsStream("/resources/bar-lines.properties")
+                InputStream in1 = this.getClass().getResourceAsStream("/resources/time.properties");        // for translating time signatures
+                InputStream in2 = this.getClass().getResourceAsStream("/resources/chords.properties");      // for translating chords
+                InputStream in3 = this.getClass().getResourceAsStream("/resources/bar-lines.properties")    // for translating bar lines
         ) {
+            // valid-alterations contains a list with all IReal Pro valid chord extensions/alterations
             Document document = new SAXBuilder().build(this.getClass().getResourceAsStream("/resources/valid-alterations.xml"));
             validQualities = document.getRootElement().getChildren("element")
                     .stream().map(Element::getText).collect(Collectors.toSet());
@@ -50,6 +52,7 @@ public class MusicXMLConverter {
             throw new RuntimeException("Could not read the required resources", e);
         }
 
+        // used for translating repetition for bar lines
         barLineMap = new HashMap<>();
         barLineMap.put(Repetition.NONE, "");
         barLineMap.put(Repetition.FORWARD, "-forward");
@@ -114,18 +117,23 @@ public class MusicXMLConverter {
                 }
                 builder.append(time.getProperty(measure.getTime().toString()));
             }
+            // only include the measure if it is not implicit
             if (!measure.isImplicit()) {
                 builder.append(barLines.getProperty(measure.getBarLineType() + barLineMap.get(measure.getRepetition())));
                 if (measure.getChords().isEmpty()) {
                     if (lastMeasure != null && lastMeasure.getChords().size() == 1) {
+                        // repeat last measure if this measure has no chords and last measure with a chord only had one chord
                         builder.append("x ");
                     } else if (lastChord == null) {
+                        // play no chord if this is the first measure
                         builder.append("n ");
                     } else {
+                        // repeat only the last chord if the previous measure with a chord had multiple chords
                         builder.append(lastChord).append(" ");
                     }
                 }
 
+                // put each measure into the IReal Pro song builder
                 for (Chord chord : measure.getChords()) {
                     StringBuilder iRealChord = new StringBuilder();
                     iRealChord.append(chord.root());
@@ -157,6 +165,9 @@ public class MusicXMLConverter {
         return builder.toString();
     }
 
+    /**
+     * check if a certain quality is valid for IReal Pro
+     */
     private boolean qualityIsValid(String quality) {
         return validQualities.contains(quality);
     }

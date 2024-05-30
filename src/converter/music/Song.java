@@ -12,6 +12,12 @@ public class Song {
     private final String key;
     private final List<Measure> measures;
 
+    /**
+     * @param title     title of the song
+     * @param composer  composer of the song
+     * @param key       key of the song
+     * @param measures  a list of all the measures in this song
+     */
     public Song(String title, String composer, String key, List<Measure> measures) {
         this.title = title;
         this.composer = composer.trim();

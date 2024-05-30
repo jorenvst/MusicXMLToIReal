@@ -5,6 +5,8 @@
 The goal of this project is to convert a <code>.musicxml</code> file into a file for [IReal Pro](https://www.irealpro.com/).
 It takes the chords from the harmony defined by the <code>.musicxml</code> file.
 
+In the future this project might become a library, so it can be used separately from the main program.
+
 For now, it only supports partwise musicxml with basic features, so some conversions won't work perfectly.
 
 <h2>2. Installation Guide</h2>
@@ -14,7 +16,7 @@ Make sure you set the archive as executable.
 
 <h2>3. Usage</h2>
 
-There is no GUI as of yet, so you have to use it from the command line as follows:
+There is no GUI yet, so you have to use it from the command line as follows:
     
     musicxml-to-ireal alpha1.0.jar path/to/file.musicxml (path/to/another/file.musicxml) ...
 

@@ -1,6 +1,5 @@
 package converter.music.factories;
 
-import com.sun.tools.javac.Main;
 import converter.music.Chord;
 import org.jdom2.Element;
 
@@ -10,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * ChordFactory --- Factory for building chords
+ */
 public class ChordFactory {
 
     /**

@@ -18,6 +18,13 @@ public class Measure {
     private final boolean implicit;
     private final Repetition repetition;
 
+    /**
+     * @param chords        chords in this measure
+     * @param time          time signature of this measure
+     * @param barLineType   type of bar line, e.g. double, regular, ...
+     * @param implicit      don't use this measure for conversion if implicit is true
+     * @param repetition    type of repetition for this bar line, e.g. none, right, left
+     */
     public Measure(Collection<Chord> chords, Time time, String barLineType, boolean implicit, Repetition repetition) {
         this.chords = new ArrayList<>(chords);
         this.time = time;
@@ -46,6 +53,9 @@ public class Measure {
         return time;
     }
 
+    /**
+     * check if this time signature has a measure change
+     */
     public boolean hasTime() {
         return time != null;
     }

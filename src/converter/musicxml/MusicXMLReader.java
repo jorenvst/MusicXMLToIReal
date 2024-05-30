@@ -54,6 +54,11 @@ public class MusicXMLReader {
         return songs;
     }
 
+    /**
+     * read a part of the song by index
+     * @param path the path to the musicxml file
+     * @param partNum the index of the part that needs to be read out
+     */
     public Song readSongPart(String path, int partNum) {
         Element root = getRoot(path);
         Element part = root.getChildren("part").get(partNum);

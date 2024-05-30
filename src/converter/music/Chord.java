@@ -13,6 +13,9 @@ import java.util.List;
  */
 public record Chord(String root, String kind, List<String> alterations, String bass) {
 
+    /**
+     * check if a bass note is specified
+     */
     public boolean hasBass() {
         return bass != null;
     }
