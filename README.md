@@ -1,5 +1,9 @@
 <h1>MusicXMLToIReal</h1>
 
+<h2>Notice</h2>
+
+This project will be discontinued and split up into 2 parts, a [Java library] for converting musicxml to IReal Pro and a [JavaFX application]().<br>
+
 <h2>1. The Project</h2>
 
 The goal of this project is to convert a <code>.musicxml</code> file into a file for [IReal Pro](https://www.irealpro.com/).
