@@ -2,7 +2,7 @@
 
 <h2>Notice</h2>
 
-This project will be discontinued and split up into 2 parts, a [Java library] for converting musicxml to IReal Pro and a [JavaFX application]().<br>
+This project will be discontinued and split up into 2 parts, a [Java library](https://github.com/jorenvst/MusicXMLToIRealLib) for converting musicxml to IReal Pro and a [JavaFX application](https://github.com/jorenvst/MusicXMLToIRealGUI).<br>
 
 <h2>1. The Project</h2>
 
